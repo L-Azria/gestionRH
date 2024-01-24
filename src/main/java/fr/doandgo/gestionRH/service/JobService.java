@@ -1,15 +1,13 @@
 package fr.doandgo.gestionRH.service;
 
-import fr.doandgo.gestionRH.dto.CompagnyDto;
 import fr.doandgo.gestionRH.dto.JobDto;
 import fr.doandgo.gestionRH.entity.Compagny;
 import fr.doandgo.gestionRH.entity.Job;
 import fr.doandgo.gestionRH.repository.CompagnyRepository;
 import fr.doandgo.gestionRH.repository.JobRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,33 +23,61 @@ public class JobService {
 
     public List<JobDto> findAllJobByCompagny(String nameCompagny){
         Optional<Compagny> optionalCompagny = this.compagnyRepository.findCompagnyByName(nameCompagny);
-        if(optionalCompagny.isPresent()){
+        if(optionalCompagny.isPresent()) {
             Compagny existingCompagny = optionalCompagny.get();
             List<Job> jobList = jobRepository.findJobsByCompagny(existingCompagny);
             List<JobDto> JobDtoList = new ArrayList<>();
-            if(!jobList.isEmpty()){
-                for (Job j : jobList){
-                    JobDtoList.add(changeToJobDto(j));
+            if (!jobList.isEmpty()) {
+                for (Job j : jobList) {
+                    JobDtoList.add(j.toJobDto(j));
                 }
-        }
-            return JobDtoList;
+                return JobDtoList;
+            } else {
+                System.out.println("La compagnie n'a pas de poste");
+            }
 
         } else {
-            System.out.println("La comapgnie n'a pas de postes");
+            System.out.println("Le nom de la compagnie n'est pas valable");
+        }
+        return null;
+
+
+    }
+
+    @Transactional
+    public void createJob(JobDto dto){
+        Job newJob = new Job(dto.getName(), dto.getService(), dto.getCategory(), dto.getCompagny().toCompagny());
+         jobRepository.save(newJob);
+    }
+
+    public void updateJob (Integer id, JobDto dto){
+        Optional<Job> optionalJob = this.jobRepository.findById(id);
+        if (optionalJob.isPresent()) {
+            Job existingJob = optionalJob.get();
+
+            // Update the Job with the new value from the DTO
+            existingJob.setName(dto.getName());
+            existingJob.setService(dto.getService());
+            existingJob.setCategory(dto.getCategory());
+
+
+            // Save the updated entity back to the repository
+            this.jobRepository.save(existingJob);
+        } else {
+            System.out.println("Le poste avec ID " + id + " non trouvé.");
         }
 
-
-        return null;
     }
 
-    public JobDto changeToJobDto(Job job){
-        return new JobDto(
-                job.getId(),
-                job.getName(),
-                job.getService(),
-                job.getCategory(),
-                job.getManaged(),
-                job.getCompagny()
-        );
+    public void deleteJob (Integer id){
+        this.jobRepository.deleteById(id);
     }
+
+
+
+
 }
+
+
+
+

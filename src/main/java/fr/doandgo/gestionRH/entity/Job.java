@@ -1,5 +1,6 @@
 package fr.doandgo.gestionRH.entity;
 
+import fr.doandgo.gestionRH.dto.JobDto;
 import fr.doandgo.gestionRH.enums.Category;
 import fr.doandgo.gestionRH.enums.Service;
 import jakarta.persistence.*;
@@ -27,7 +28,29 @@ public class Job {
     @ManyToOne
     private Compagny compagny;
 
-    public Job() {
+
+
+    public Job(String name, Service service, Category category, Compagny compagny) {
+        this.name = name;
+        this.service = service;
+        this.category = category;
+        this.compagny = compagny;
     }
+
+    public Job() {
+
+    }
+
+    public JobDto toJobDto(Job job){
+        return new JobDto(
+                job.getId(),
+                job.getName(),
+                job.getService(),
+                job.getCategory(),
+                //job.getManaged(),
+                job.getCompagny()
+        );
+    }
+
 
 }

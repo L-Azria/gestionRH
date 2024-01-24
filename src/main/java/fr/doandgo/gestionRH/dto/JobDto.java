@@ -6,6 +6,8 @@ import fr.doandgo.gestionRH.enums.Category;
 import fr.doandgo.gestionRH.enums.Service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -17,21 +19,41 @@ public class JobDto {
     private String name;
     private Service service;
     private Category category;
-    private List<String> managed;
-    private String compagny;
+    //private List<String> managed;
+    private CompagnyDto compagny;
 
     public JobDto() {
     }
-    public JobDto(Job job){
+    /*public JobDto(Job job){
+        this.id = job.getId();
         this.name = job.getName();
         this.service = job.getService();
         this.category = job.getCategory();
-        this.managed = Collections.singletonList(job.getManaged().toString());
-        this.compagny = job.getCompagny().toString();
+        //this.managed = Collections.singletonList(job.getManaged().toString());
+        this.compagny = new CompagnyDto(job.getCompagny());
 
+    }*/
+
+
+    public JobDto(Integer id, String name, Service service, Category category, Compagny compagny) {
+        this.id = id;
+        this.name = name;
+        this.service = service;
+        this.category = category;
+        this.compagny =  new CompagnyDto(compagny.getId(), compagny.getName());
     }
 
 
-    public JobDto(Integer id, String name, Service service, Category category, List<Job> managed, Compagny compagny) {
+
+
+
+
+    @Override
+    public String toString() {
+        return " Poste de l'entreprise : " +
+                " id=" + id +
+                ", name=" + name +
+                ", service=" + service +
+                ", category=" + category;
     }
 }

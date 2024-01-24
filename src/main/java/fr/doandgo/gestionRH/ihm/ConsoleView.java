@@ -13,6 +13,8 @@ public class ConsoleView {
 
     private DisplayMenuCompagny displayMenuCompagny;
     private DisplayMenuJob displayMenuJob;
+    private DisplayMenuEmployee displayMenuEmployee;
+    private DisplayMenuContract displayMenuContract;
 
 
     public void consoleView() {
@@ -22,21 +24,25 @@ public class ConsoleView {
             System.out.println("1. Les postes de travail");
             System.out.println("2. Les employés");
             System.out.println("3. Les compagnies");
+            System.out.println("4. Les contrats");
             System.out.println("99. Exit");
             System.out.println("Choix n° : ");
 
             choix = scanner.nextInt();
-            scanner.nextLine(); // Pour consommer la nouvelle ligne restante après la lecture de l'entier
+            scanner.nextLine();
 
             switch (choix) {
                 case 1:
                     displayMenuJob.displayMenuJob();
                     break;
                 case 2:
-                   //
+                    displayMenuEmployee.displayMenuEmplyee();
                     break;
                 case 3:
                     displayMenuCompagny.displayMenuCompagny();
+                    break;
+                case 4:
+                    displayMenuContract.displayMenuContract();
                     break;
                 case 99:
                     System.out.println("Au revoir !");

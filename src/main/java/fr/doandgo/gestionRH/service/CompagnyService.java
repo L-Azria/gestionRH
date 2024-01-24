@@ -65,7 +65,7 @@ public class CompagnyService {
         } else {
             System.out.println("Compagny with ID " + id + " not found.");
         }
-        //this.compagnyRepository.updateCompagnyById(id, dto.getName());
+
 
     }
 

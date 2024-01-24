@@ -13,11 +13,22 @@ public class CompagnyDto {
     private String name;
 
     public CompagnyDto(Compagny compagny){
+        this.id = compagny.getId();
         this.name = compagny.getName();
     }
 
+
     public CompagnyDto(){
 
+    }
+
+
+
+    public Compagny toCompagny() {
+        Compagny compagny = new Compagny();
+        compagny.setId(this.getId());
+        compagny.setName(this.getName());
+        return compagny;
     }
 
     @Override

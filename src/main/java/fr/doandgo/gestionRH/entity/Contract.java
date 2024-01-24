@@ -19,8 +19,10 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private ContractTypes contractTypes;
-    private Date startDate;
-    private Date endDate;
+    @ManyToOne
+    private DateStartContract startDate;
+    @ManyToOne
+    private DateEndContract endDate;
     private Double salary;
     private TerminationReason terminationReason;
     private WorkingCondition workingCondition;
@@ -31,6 +33,7 @@ public class Contract {
     private Job job;
     @OneToMany
     private List<Amendment> amendments;
+
 
     public Contract() {
 
