@@ -1,5 +1,6 @@
 package fr.doandgo.gestionRH.entity;
 
+import fr.doandgo.gestionRH.dto.ContractDto;
 import fr.doandgo.gestionRH.enums.ContractTypes;
 import fr.doandgo.gestionRH.enums.TerminationReason;
 import fr.doandgo.gestionRH.enums.WorkingCondition;
@@ -19,23 +20,33 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private ContractTypes contractTypes;
-    @ManyToOne
-    private DateStartContract startDate;
-    @ManyToOne
-    private DateEndContract endDate;
+    private Date startDate;
+    private Date endDate;
     private Double salary;
     private TerminationReason terminationReason;
     private WorkingCondition workingCondition;
-    private String urlDoc;
     @ManyToOne
     private Employee employee;
     @ManyToOne
     private Job job;
-    @OneToMany
-    private List<Amendment> amendments;
+
 
 
     public Contract() {
 
+    }
+
+    public ContractDto toContractDto(Contract contract){
+        return new ContractDto(
+                contract.getId(),
+                contract.getContractTypes(),
+                contract.getStartDate(),
+                contract.getEndDate(),
+                contract.getSalary(),
+                contract.getTerminationReason(),
+                contract.getWorkingCondition(),
+                contract.getEmployee(),
+                contract.getJob()
+        );
     }
 }

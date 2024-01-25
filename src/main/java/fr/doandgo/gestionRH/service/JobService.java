@@ -6,6 +6,7 @@ import fr.doandgo.gestionRH.entity.Job;
 import fr.doandgo.gestionRH.repository.CompagnyRepository;
 import fr.doandgo.gestionRH.repository.JobRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,17 +22,26 @@ public class JobService {
     private JobRepository jobRepository;
     private CompagnyRepository compagnyRepository;
 
+    public List<JobDto> findAllJob(){
+        List<Job> jobList = this.jobRepository.findAll();
+        List<JobDto> jobDtoList = new ArrayList<>();
+        for(Job j : jobList){
+            jobDtoList.add((j.toJobDto(j)));
+        }
+        return jobDtoList;
+    }
+
     public List<JobDto> findAllJobByCompagny(String nameCompagny){
         Optional<Compagny> optionalCompagny = this.compagnyRepository.findCompagnyByName(nameCompagny);
         if(optionalCompagny.isPresent()) {
             Compagny existingCompagny = optionalCompagny.get();
             List<Job> jobList = jobRepository.findJobsByCompagny(existingCompagny);
-            List<JobDto> JobDtoList = new ArrayList<>();
+            List<JobDto> jobDtoList = new ArrayList<>();
             if (!jobList.isEmpty()) {
                 for (Job j : jobList) {
-                    JobDtoList.add(j.toJobDto(j));
+                    jobDtoList.add(j.toJobDto(j));
                 }
-                return JobDtoList;
+                return jobDtoList;
             } else {
                 System.out.println("La compagnie n'a pas de poste");
             }

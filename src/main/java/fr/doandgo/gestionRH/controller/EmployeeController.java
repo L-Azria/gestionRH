@@ -22,13 +22,16 @@ public class EmployeeController extends AbstractController<EmployeeDto> {
 
     @Override
     public List<EmployeeDto> getAllDto() {
-        return null;
+        return this.employeeService.findAllEmployee();
     }
 
     @Override
     public void createDto(EmployeeDto dto) {
         this.employeeService.createEmployee(dto);
+    }
 
+    public EmployeeDto createEmployeeDto(EmployeeDto dto){
+        return this.employeeService.createEmployee(dto);
     }
 
     @Override

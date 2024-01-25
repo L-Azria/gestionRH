@@ -24,15 +24,7 @@ public class JobDto {
 
     public JobDto() {
     }
-    /*public JobDto(Job job){
-        this.id = job.getId();
-        this.name = job.getName();
-        this.service = job.getService();
-        this.category = job.getCategory();
-        //this.managed = Collections.singletonList(job.getManaged().toString());
-        this.compagny = new CompagnyDto(job.getCompagny());
 
-    }*/
 
 
     public JobDto(Integer id, String name, Service service, Category category, Compagny compagny) {
@@ -54,6 +46,7 @@ public class JobDto {
                 " id=" + id +
                 ", name=" + name +
                 ", service=" + service +
-                ", category=" + category;
+                ", category=" + category +
+                ", compagnie=" + compagny.getName();
     }
 }

@@ -22,7 +22,7 @@ public class JobController extends AbstractController<JobDto> {
 
     @Override
     public List<JobDto> getAllDto() {
-        return null;
+        return this.jobService.findAllJob();
     }
 
     public List<JobDto> getAllDtoByCompagny(String nameCompagny) {

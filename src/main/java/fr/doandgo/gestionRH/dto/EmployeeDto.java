@@ -16,4 +16,25 @@ public class EmployeeDto {
     private Diplome diplomeLevel;
     private Integer addressId;
 
+    public EmployeeDto(){};
+
+    public EmployeeDto(Integer id, String firstname, String lastname, Date birthDay, Diplome diplomeLevel, Integer addressId) {
+        this.id = id;
+        this.firstName = firstname;
+        this.lastName = lastname;
+        this.birthday = birthDay;
+        this.diplomeLevel = diplomeLevel;
+        this.addressId = addressId;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee : " +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthday=" + birthday +
+                ", diplomeLevel=" + diplomeLevel +
+                ", address=" + addressId ;
+    }
 }

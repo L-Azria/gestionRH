@@ -50,7 +50,7 @@ public class DisplayMenuEmployee {
 
                     break;
                 case 2:
-                    EmployeeDto newEmployeeDto = new EmployeeDto();
+                    /*EmployeeDto newEmployeeDto = new EmployeeDto();
                     System.out.println("Saisie le prénom du nouveau employé: ");
                     String newFirstName = scanner.nextLine();
                     newEmployeeDto.setFirstName(newFirstName);
@@ -92,7 +92,7 @@ public class DisplayMenuEmployee {
 
                     newEmployeeDto.setAddressId(createdAddressDto.getId());
                     employeeController.createDto(newEmployeeDto);
-
+*/
 
 
 
