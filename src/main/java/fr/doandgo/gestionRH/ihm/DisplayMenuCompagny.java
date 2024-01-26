@@ -23,6 +23,7 @@ public class DisplayMenuCompagny {
     public void displayMenuCompagny() {
         int choix;
         do {
+            System.out.println(" ");
             System.out.println("Voulez-vous :");
             System.out.println("1. Lister les compagnies");
             System.out.println("2. Créer une nouvelle compagnie");

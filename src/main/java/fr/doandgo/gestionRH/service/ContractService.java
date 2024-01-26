@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +22,20 @@ public class ContractService {
     private JobRepository jobRepository;
     private EmployeeRepository employeeRepository;
     private CompagnyRepository compagnyRepository;
+
+    public List<ContractDto> findAll(){
+        List<Contract> contracts = contractRepository.findAll();
+        List<ContractDto> contractDtoList = new ArrayList<>();
+        if (!contracts.isEmpty()) {
+            for (Contract c : contracts) {
+                contractDtoList.add(c.toContractDto(c));
+            }
+        } else {
+            System.out.println("Pas de contrat");
+        }
+        return contractDtoList;
+
+    }
 
     public List<ContractDto> findContractByEmployee(EmployeeDto selectedEmployeeId){
         List<Contract> contracts = contractRepository.findContractsByEmployee_Id(selectedEmployeeId.getId());
@@ -48,7 +63,26 @@ public class ContractService {
         newContract.setEmployee(employeeRepository.findById(dto.getEmployeeId()).orElseThrow());
 
         contractRepository.save(newContract);
+    }
 
+    public void updateContract(Integer id, ContractDto dto){
+        Optional<Contract> optionalContract = this.contractRepository.findById(id);
+        if(optionalContract.isPresent()){
+            Contract existingContract = optionalContract.get();
+
+            existingContract.setContractTypes(dto.getContractTypes());
+            existingContract.setStartDate(dto.getStartDate());
+            existingContract.setEndDate(dto.getEndDate());
+            existingContract.setSalary(dto.getSalary());
+            existingContract.setTerminationReason(dto.getTerminationReason());
+            existingContract.setWorkingCondition(dto.getWorkingCondition());
+
+            this.contractRepository.save(existingContract);
+        }
+    }
+
+    public void deleteContract (Integer id){
+        this.contractRepository.deleteById(id);
     }
 
 }

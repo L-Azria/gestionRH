@@ -2,7 +2,7 @@ package fr.doandgo.gestionRH.ihm;
 
 import fr.doandgo.gestionRH.controller.*;
 import fr.doandgo.gestionRH.dto.*;
-import fr.doandgo.gestionRH.enums.Diplome;
+import fr.doandgo.gestionRH.enums.*;
 import fr.doandgo.gestionRH.utils.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +29,7 @@ public class DisplayMenuContract {
     public void displayMenuContract() {
         int choix;
         do {
+            System.out.println(" ");
             System.out.println("Voulez-vous :");
             System.out.println("1. Lister les contrats par employé");
             System.out.println("2. Créer un nouveau contrat");
@@ -53,8 +54,6 @@ public class DisplayMenuContract {
                     for (ContractDto c : contractDtoList){
                         System.out.println(c);
                     }
-
-
 
 
                     break;
@@ -154,11 +153,115 @@ public class DisplayMenuContract {
 
                     break;
                 case 3:
-                    System.out.println("Saisie l'id de la compagnie à modifier: ");
+                    ContractList contractList = new ContractList(scanner);
+                    System.out.println("Liste des contrats: ");
+                    contractList.displayContract(contractController.getAllDto());
+                    System.out.println("Saisir l'id du contrat que vous voulez modifier: ");
+                    ContractDto selectedContractDtoToEdit = contractList.selectContract(contractController.getAllDto());
+                    if (selectedContractDtoToEdit != null) {
+                        System.out.println("Poste sélectionnée : " + selectedContractDtoToEdit);
+                    } else {
+                        System.out.println("Aucune poste trouvée avec l'ID spécifié.");
+                    }
+
+                    int selectedField;
+                    do {
+                        System.out.println(" ");
+                        System.out.println("Voulez-vous changer :");
+                        System.out.println("1. Le type du contrat");
+                        System.out.println("2. La date de début");
+                        System.out.println("3. La date de fin");
+                        System.out.println("4. Le salaire");
+                        System.out.println("5. La raison de mettre fin au contrat");
+                        System.out.println("6. La condition du travail");
+                        System.out.println("99. Fini les modifications");
+                        System.out.println("Choix n° : ");
+                        selectedField = scanner.nextInt();
+
+                        scanner.nextLine();
+
+                        switch (selectedField) {
+                            case 1:
+                                System.out.println("Choisir le nouveau type de contrat: ");
+                                ContractTypeList.displayContractType();
+                                ContractTypes newCT = ContractTypeList.chooseContractTypes();
+                                assert selectedContractDtoToEdit != null;
+                                selectedContractDtoToEdit.setContractTypes(newCT);
+                                break;
+
+                            case 2:
+                                System.out.println("Saisir la nouvelle date de début : ");
+                                String inputNewStartDate = scanner.nextLine();
+                                try {
+                                    Date newStartDate = convertUserInputToDate(inputNewStartDate);
+                                    assert selectedContractDtoToEdit != null;
+                                    selectedContractDtoToEdit.setStartDate(newStartDate);
+                                } catch (ParseException e) {
+                                    System.out.println("Format de date incorrect");
+                                }
+                                break;
+
+                            case 3:
+                                System.out.println("Saisir la nouvelle date de début : ");
+                                String inputNewEndDate = scanner.nextLine();
+                                try {
+                                    Date newEndDate = convertUserInputToDate(inputNewEndDate);
+                                    assert selectedContractDtoToEdit != null;
+                                    selectedContractDtoToEdit.setEndDate(newEndDate);
+                                } catch (ParseException e) {
+                                    System.out.println("Format de date incorrect");
+                                }
+                                break;
+
+                            case 4 :
+                                System.out.println("Saisir le nouveau salaire : ");
+                                Double newSalary = scanner.nextDouble();
+                                scanner.nextLine();
+                                assert selectedContractDtoToEdit != null;
+                                selectedContractDtoToEdit.setSalary(newSalary);
+                                break;
+
+                            case 5:
+                                System.out.println("Choisir la nouvelle raison de mettre fin au contrat: ");
+                                TerminationReasonList.displayTerminationReason();
+                                TerminationReason newTR = TerminationReasonList.chooseTerminationReason();
+                                assert selectedContractDtoToEdit != null;
+                                selectedContractDtoToEdit.setTerminationReason(newTR);
+                                break;
+
+                            case 6:
+                                System.out.println("Choisir la nouvelle condition du travail: ");
+                                WorkingConditionList.displayWorkingCondition();
+                                WorkingCondition newWCond = WorkingConditionList.chooseWorkingCondition();
+                                assert selectedContractDtoToEdit != null;
+                                selectedContractDtoToEdit.setWorkingCondition(newWCond);
+                                break;
+
+                            case 99:
+                                System.out.println("Retour au menu principal.");
+                                break;
+                            default:
+                                System.out.println("Option invalide.");
+                        }
+
+
+                        contractController.updateDto(selectedContractDtoToEdit.getId(), selectedContractDtoToEdit);
+                        System.out.println("Poste mis à jour : " + selectedContractDtoToEdit);
+                    } while (selectedField != 99);
 
                     break;
                 case 4:
-                    System.out.println("Saisie l'id de la compagnie à supprimer: ");
+                    ContractList contractListForDelete = new ContractList(scanner);
+                    System.out.println("Liste des contrats: ");
+                    contractListForDelete.displayContract(contractController.getAllDto());
+                    System.out.println("Saisir l'id du contrat que vous voulez supprimer: ");
+                    ContractDto selectedContractDtoToDelete = contractListForDelete.selectContract(contractController.getAllDto());
+                    if (selectedContractDtoToDelete != null) {
+                        contractController.deleteDto(selectedContractDtoToDelete.getId());
+                        System.out.println("Le contrat " + selectedContractDtoToDelete + " a été supprimé");
+                    } else {
+                        System.out.println("Le contrat n'a pas été supprimé");
+                    }
 
                     break;
                 case 99:

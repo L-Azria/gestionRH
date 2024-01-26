@@ -31,6 +31,7 @@ public class DisplayMenuJob {
     public void displayMenuJob() {
         int choix;
         do {
+            System.out.println(" ");
             System.out.println("Voulez-vous :");
             System.out.println("1. Lister les postes de travail pour une compagnie");
             System.out.println("2. Créer une nouvelle poste de travail pour une compagnie");
@@ -136,6 +137,7 @@ public class DisplayMenuJob {
 
                     int selectedField;
                     do {
+                        System.out.println(" ");
                         System.out.println("Voulez-vous changer :");
                         System.out.println("1. Le nom du poste");
                         System.out.println("2. Le service");

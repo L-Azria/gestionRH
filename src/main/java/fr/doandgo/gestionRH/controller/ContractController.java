@@ -21,7 +21,7 @@ public class ContractController extends AbstractController<ContractDto> {
 
     @Override
     public List<ContractDto> getAllDto() {
-        return null;
+        return this.contractService.findAll();
     }
 
     public List<ContractDto> getContractDtoByEmployee(EmployeeDto selectedEmployeeId){
@@ -36,11 +36,13 @@ public class ContractController extends AbstractController<ContractDto> {
 
     @Override
     public void updateDto(Integer id, ContractDto dto) {
+        this.contractService.updateContract(id, dto);
 
     }
 
     @Override
     public void deleteDto(Integer id) {
+        this.contractService.deleteContract(id);
 
     }
 

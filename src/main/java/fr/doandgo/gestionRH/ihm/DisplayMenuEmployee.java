@@ -2,11 +2,16 @@ package fr.doandgo.gestionRH.ihm;
 
 import fr.doandgo.gestionRH.controller.AddressController;
 import fr.doandgo.gestionRH.controller.CityController;
+import fr.doandgo.gestionRH.controller.CompagnyController;
 import fr.doandgo.gestionRH.controller.EmployeeController;
 import fr.doandgo.gestionRH.dto.AddressDto;
+import fr.doandgo.gestionRH.dto.CompagnyDto;
+import fr.doandgo.gestionRH.dto.ContractDto;
 import fr.doandgo.gestionRH.dto.EmployeeDto;
+import fr.doandgo.gestionRH.enums.Category;
 import fr.doandgo.gestionRH.enums.Diplome;
-import fr.doandgo.gestionRH.utils.DiplomeList;
+import fr.doandgo.gestionRH.enums.Service;
+import fr.doandgo.gestionRH.utils.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -27,17 +32,18 @@ public class DisplayMenuEmployee {
     private CityController cityController;
     private AddressController addressController;
     private EmployeeController employeeController;
+    private CompagnyController compagnyController;
 
 
 
     public void displayMenuEmplyee() {
         int choix;
         do {
+            System.out.println(" ");
             System.out.println("Voulez-vous :");
             System.out.println("1. Lister les employées");
-            System.out.println("2. Créer une nouvelle employée");
-            System.out.println("3. Mettre à jour une employée");
-            System.out.println("4. Supprimer une employée");
+            System.out.println("2. Mettre à jour une employée");
+            System.out.println("3. Supprimer une employée");
             System.out.println("99. Retour en arrière");
             System.out.println("Choix n° : ");
             choix = scanner.nextInt();
@@ -46,72 +52,88 @@ public class DisplayMenuEmployee {
 
             switch (choix) {
                 case 1:
-                    System.out.println("Liste des compagnies : ");
-
+                    EmployeeList employeeList = new EmployeeList(scanner);
+                    System.out.println("List des employés : ");
+                    employeeList.displayEmployee(employeeController.getAllDto());
                     break;
+
                 case 2:
-                    /*EmployeeDto newEmployeeDto = new EmployeeDto();
-                    System.out.println("Saisie le prénom du nouveau employé: ");
-                    String newFirstName = scanner.nextLine();
-                    newEmployeeDto.setFirstName(newFirstName);
+                    EmployeeList employeeListToEdit = new EmployeeList(scanner);
 
-                    System.out.println("Saisie le nom du nouveau employé: ");
-                    String newLastName = scanner.nextLine();
-                    newEmployeeDto.setLastName(newLastName);
+                    System.out.println("List des employés : ");
+                    employeeListToEdit.displayEmployee(employeeController.getAllDto());
+                    System.out.println("Choisir l'employé dont vous voulez modifier : ");
+                    EmployeeDto selectedEmployeeToEdit = employeeListToEdit.selectEmployee(employeeController.getAllDto());
 
-                    System.out.println("Saisie la date de naissance du nouveau employé (dd/MM/YYYY): ");
-                    String userInput = scanner.nextLine();
-                    try {
-                        Date newBirthDay = convertUserInputToDate(userInput);
-                        newEmployeeDto.setBirthday(newBirthDay);
-                    } catch (ParseException e) {
-                        System.out.println("Format de date incorrect");
-                    }
+                    int selectedField;
+                    do {
+                        System.out.println(" ");
+                        System.out.println("Voulez-vous changer :");
+                        System.out.println("1. Le prénom ");
+                        System.out.println("2. Le nom");
+                        System.out.println("3. La date de naissance");
+                        System.out.println("4. Le niveau du diplôme");
+                        System.out.println("99. Fini les modifications");
+                        System.out.println("Choix n° : ");
+                        selectedField = scanner.nextInt();
 
-                    System.out.println("Saisie le niveau de diplôme le plus élevé: ");
-                    DiplomeList.displayDiplome();
-                    Diplome chooseDiplome = DiplomeList.chooseDiplome();
-                    newEmployeeDto.setDiplomeLevel(chooseDiplome);
+                        scanner.nextLine();
 
-                    AddressDto newAddressDto = new AddressDto();
-                    System.out.println("Saisie l'adresse de l'employé: ");
-                    System.out.println("Numéro: ");
-                    String numberAddress = scanner.nextLine();
-                    newAddressDto.setNumber(numberAddress);
-                    System.out.println("Rue/Voie: ");
-                    String streetAddress = scanner.nextLine();
-                    newAddressDto.setStreet(streetAddress);
-                    System.out.println("Code Postal: ");
-                    Integer newCodePostal = scanner.nextInt();
-                    scanner.nextLine();
-                    newAddressDto.setCodePostal(newCodePostal);
-                    System.out.println("Ville: ");
-                    String newNameCity = scanner.nextLine();
-                    newAddressDto.setNameCity(newNameCity);
-                    AddressDto createdAddressDto = addressController.createAddressDto(newAddressDto);
+                        switch (selectedField) {
+                            case 1:
+                                System.out.println("Saisir le nouveau prénom : ");
+                                String newFirstName = scanner.nextLine();
+                                selectedEmployeeToEdit.setFirstName(newFirstName);
+                                break;
+                            case 2:
+                                System.out.println("Saisir le nouveau nom: ");
+                                String newLasttName = scanner.nextLine();
+                                selectedEmployeeToEdit.setLastName(newLasttName);
+                                break;
 
-                    newEmployeeDto.setAddressId(createdAddressDto.getId());
-                    employeeController.createDto(newEmployeeDto);
-*/
+                            case 3:
+                                System.out.println("Saisir la nouvelle date de naissance : ");
+                                String inputNewBD = scanner.nextLine();
+                                try {
+                                    Date newBD = convertUserInputToDate(inputNewBD);
+                                    assert selectedEmployeeToEdit != null;
+                                    selectedEmployeeToEdit.setBirthday(newBD);
+                                } catch (ParseException e) {
+                                    System.out.println("Format de date incorrect");
+                                }
+                                break;
+
+                            case 4:
+                                System.out.println("Choisir le nouveau niveau de diplôme: ");
+                                DiplomeList.displayDiplome();
+                                Diplome newDiplome = DiplomeList.chooseDiplome();
+                                selectedEmployeeToEdit.setDiplomeLevel(newDiplome);
+                                break;
+                            case 99:
+                                System.out.println("Retour au menu principal.");
+                                break;
+                            default:
+                                System.out.println("Option invalide.");
+                        }
 
 
-
-
-
-
-
-
-
-
-
+                        employeeController.updateDto(selectedEmployeeToEdit.getId(), selectedEmployeeToEdit);
+                        System.out.println("Employé mis à jour : " + selectedEmployeeToEdit);
+                    } while (selectedField != 99);
 
                     break;
                 case 3:
-                    System.out.println("Saisie l'id de la compagnie à modifier: ");
-
-                    break;
-                case 4:
-                    System.out.println("Saisie l'id de la compagnie à supprimer: ");
+                    EmployeeList employeeListForDelete = new EmployeeList(scanner);
+                    System.out.println("Liste des employé: ");
+                    employeeListForDelete.displayEmployee(employeeController.getAllDto());
+                    System.out.println("Saisir l'id de l'employé que vous voulez supprimer: ");
+                    EmployeeDto selectedEmployeeDtoToDelete = employeeListForDelete.selectEmployee(employeeController.getAllDto());
+                    if (selectedEmployeeDtoToDelete != null) {
+                        employeeController.deleteDto(selectedEmployeeDtoToDelete.getId());
+                        System.out.println("L'employé " + selectedEmployeeDtoToDelete + " a été supprimé");
+                    } else {
+                        System.out.println("L'employé n'a pas été supprimé");
+                    }
 
                     break;
                 case 99:

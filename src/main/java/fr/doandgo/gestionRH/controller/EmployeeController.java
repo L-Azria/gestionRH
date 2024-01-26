@@ -36,11 +36,13 @@ public class EmployeeController extends AbstractController<EmployeeDto> {
 
     @Override
     public void updateDto(Integer id, EmployeeDto dto) {
+        this.employeeService.updateEmployee(id, dto);
 
     }
 
     @Override
     public void deleteDto(Integer id) {
+        this.employeeService.deleteById(id);
 
     }
 }

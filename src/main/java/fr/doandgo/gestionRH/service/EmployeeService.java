@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -38,6 +39,25 @@ public class EmployeeService {
 
 
 
+    }
+
+    public void updateEmployee (Integer id, EmployeeDto dto){
+        Optional<Employee> optionalEmployee = this.employeeRepository.findById(id);
+        if(optionalEmployee.isPresent()){
+            Employee existingEmployee = optionalEmployee.get();
+
+            existingEmployee.setFirstname(dto.getFirstName());
+            existingEmployee.setLastname(dto.getLastName());
+            existingEmployee.setBirthDay(dto.getBirthday());
+            existingEmployee.setDiplomeLevel(dto.getDiplomeLevel());
+            this.employeeRepository.save(existingEmployee);
+        } else {
+            System.out.println("l'id non trouvé");
+        }
+    }
+
+    public void deleteById(Integer id){
+        this.employeeRepository.deleteById(id);
     }
 
     public EmployeeDto changeToEmployeeDto (Employee employee){
